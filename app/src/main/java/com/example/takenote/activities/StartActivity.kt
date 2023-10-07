@@ -18,7 +18,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -43,7 +42,7 @@ class StartActivity : AppCompatActivity() {
             windowManager.defaultDisplay.getMetrics(displayMetrics)
 
             val screenWidth = displayMetrics.widthPixels
-            //var height = displayMetrics.heightPixels
+            val screenHeight = displayMetrics.heightPixels
 
             TakeNoteTheme() {
                 supportActionBar?.hide()
@@ -75,9 +74,16 @@ class StartActivity : AppCompatActivity() {
                                     GameViewModel(
                                         navController,
                                         screenWidth,
+                                        screenHeight,
                                     )
                                 }
-                                DisplayGame(gameViewModel, gameViewModel.whiteNoteWidth)
+                                DisplayGame(
+                                    gameViewModel,
+                                    gameViewModel.whiteKeyWidth,
+                                    gameViewModel.clefBuffer,
+                                    gameViewModel.zoneWidth,
+                                    gameViewModel.staveHeight,
+                                )
 
                             }
                         }

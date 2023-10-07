@@ -2,12 +2,10 @@ package com.example.takenote.ui.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,25 +23,47 @@ fun KeyRectangle(
     note: Notes,
     noteWidth: Int,
 ) {
-//    Column(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .fillMaxWidth(noteWidth)
-//            .padding(1.dp),
-//        verticalArrangement = Arrangement.SpaceEvenly,
-//        horizontalAlignment = Alignment.CenterHorizontally,
-//    )
-//    {
-        Box(
-            modifier = Modifier
-                .border(1.dp, Color.Yellow)
-                .width(noteWidth.dp)
-                .fillMaxHeight(0.8f)
-                .background(color = Color.Gray)
-                .clip(RoundedCornerShape(10.dp)),
-            contentAlignment = Alignment.Center,
-        ) {
-            Text(text = note.toString())
-        }
-//    }
+    Box(
+        modifier = Modifier
+            .border(1.dp, Color.Yellow)
+            .width(noteWidth.dp)
+            .fillMaxHeight(0.8f)
+            .background(color = Color.Gray)
+            .clip(RoundedCornerShape(10.dp)),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(text = note.toString())
+    }
+}
+
+@Composable
+fun StaveBar(
+    clefBuffer: Int,
+) {
+    Box(
+        modifier = Modifier
+            .padding(top = 18.dp, start = clefBuffer.dp)
+            .fillMaxWidth()
+            .height(5.dp)
+            .background(Color.Black)
+    ) {
+
+    }
+}
+
+@Composable
+fun HitZone(
+    zoneWidth: Int,
+    zoneHeight: Int,
+    clefBuffer: Int,
+) {
+    Box(
+        modifier = Modifier
+            .padding(top = 18.dp, start = clefBuffer.dp)
+            .height(zoneHeight.dp)
+            .width(zoneWidth.dp)
+            .background(Color.Green)
+    ) {
+
+    }
 }
