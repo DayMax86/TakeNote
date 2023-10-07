@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -17,6 +18,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.takenote.enums.Notes
+
+@Composable
+fun NoteBox(
+    dimensions: Int,
+){
+    Box(
+        modifier = Modifier
+            .border(1.dp, Color.Red)
+            .size(dimensions.dp)
+            .clip(RoundedCornerShape(1.dp))
+    )
+}
 
 @Composable
 fun KeyRectangle(
@@ -42,7 +55,7 @@ fun StaveBar(
 ) {
     Box(
         modifier = Modifier
-            .padding(top = 18.dp, start = clefBuffer.dp)
+            .padding(top = 18.dp)
             .fillMaxWidth()
             .height(5.dp)
             .background(Color.Black)
