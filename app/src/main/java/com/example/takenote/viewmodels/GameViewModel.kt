@@ -1,14 +1,16 @@
 package com.example.takenote.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.example.takenote.classes.Note
 import com.example.takenote.enums.Notes
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Timer
-import java.util.TimerTask
-import kotlin.concurrent.timerTask
+import kotlin.system.measureTimeMillis
 
 class GameViewModel(
     private val navController: NavHostController,
@@ -17,6 +19,7 @@ class GameViewModel(
 ) : ViewModel() {
 
     private var screenWidth: Int = scrWidth
+    private var screenHeight: Int = scrHeight
     private var difficultyWidthMultiplier =
         1 //reduce this value (always > 0) to increase difficulty
     val staveHeight: Int = scrHeight / 150 * 10
@@ -25,19 +28,40 @@ class GameViewModel(
     var zoneWidth: Int =
         whiteKeyWidth * difficultyWidthMultiplier //By default the hitbox width is the same as a key width
 
-    var gameRunning: Boolean = false
-
-    val timer: Timer = Timer()
-    var timeBetweenNotes: Long = 5000L //5 seconds for now
+    var gameRunning: Boolean = true
 
     var activeNotes = ArrayList<Note>()
 
     init {
-        gameRunning = true
-        timer.schedule(
-            timerTask { chooseRandomNote() },
-            timeBetweenNotes,
-        )
+        //while (gameRunning) {
+            viewModelScope.launch {
+                playGame()
+                delay(1000)
+            }
+        //}
+    }
+
+    private fun playGame() {
+        viewModelScope.launch {
+            var noteToBeDeleted = false
+
+            if (activeNotes.isEmpty()) {
+                spawnNote(chooseRandomNote())
+            } else {
+                activeNotes.forEach {
+                    it.travel()
+                    //New notes only spawn when the last one is removed
+                    //That way the spawn delay is controlled by the speed of the notes
+                    if (it.xPos < clefBuffer) {
+                        noteToBeDeleted = true
+                    }
+                }
+            }
+            if (noteToBeDeleted) {
+                activeNotes.clear()
+            }
+
+        }
 
     }
 
@@ -49,7 +73,7 @@ class GameViewModel(
         return Notes.values().random()
     }
 
-    fun spawnNote(
+    private fun spawnNote(
         noteName: Notes
     ) {
         //move note in from the right at a certain speed by updating its coordinates
@@ -57,18 +81,11 @@ class GameViewModel(
         val note = Note(noteName)
         note.xPos = screenWidth + note.dimensions
         //note.yPos needs to know where the stave lines are and match them with the note names
+        //Temporarily hardcode a yPos value
+        note.yPos = screenHeight / 2
+        //---------------------------------
         activeNotes.add(note)
     }
 
-    fun cycleGameLoop() {
-        viewModelScope.launch {
-            while (gameRunning) {
-                activeNotes.forEach { note ->
-                    note.travel()
-                }
-            }
-        }
-
-    }
 
 }

@@ -14,12 +14,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.takenote.classes.Note
 import com.example.takenote.enums.Notes
 import com.example.takenote.ui.ui.HitZone
 import com.example.takenote.ui.ui.KeyRectangle
+import com.example.takenote.ui.ui.NoteBox
 import com.example.takenote.ui.ui.StaveBar
 import com.example.takenote.viewmodels.GameViewModel
-
 
 @Composable
 fun DisplayGame(
@@ -29,9 +30,10 @@ fun DisplayGame(
     zoneWidth: Int,
     staveHeight: Int,
 ) {
+
     Box(
         modifier = Modifier
-            .border(2.dp, Color.Red)
+            //.border(2.dp, Color.Red)
     ) {
         HitZone(
             zoneWidth = zoneWidth,
@@ -55,7 +57,21 @@ fun DisplayGame(
         )
     }
 
+    DisplayNotes(
+        viewModel.activeNotes
+    )
+
 }
+
+@Composable
+fun DisplayNotes(
+    activeNotes: ArrayList<Note>,
+) {
+    activeNotes.forEach {
+        NoteBox(it.dimensions)
+    }
+}
+
 
 @Composable
 fun DisplayStave(
