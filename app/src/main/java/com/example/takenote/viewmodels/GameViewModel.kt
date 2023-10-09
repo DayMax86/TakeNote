@@ -1,16 +1,12 @@
 package com.example.takenote.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.example.takenote.classes.Note
 import com.example.takenote.enums.Notes
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.Timer
-import kotlin.system.measureTimeMillis
 
 class GameViewModel(
     private val navController: NavHostController,
@@ -18,8 +14,8 @@ class GameViewModel(
     scrHeight: Int,
 ) : ViewModel() {
 
-    private var screenWidth: Int = scrWidth
-    private var screenHeight: Int = scrHeight
+    var screenWidth: Int = scrWidth
+    var screenHeight: Int = scrHeight
     private var difficultyWidthMultiplier =
         1 //reduce this value (always > 0) to increase difficulty
     val staveHeight: Int = scrHeight / 150 * 10
@@ -33,35 +29,35 @@ class GameViewModel(
     var activeNotes = ArrayList<Note>()
 
     init {
-        //while (gameRunning) {
-            viewModelScope.launch {
+        viewModelScope.launch {
+            while (gameRunning) {
                 playGame()
                 delay(1000)
             }
-        //}
+        }
     }
 
     private fun playGame() {
-        viewModelScope.launch {
-            var noteToBeDeleted = false
+        //viewModelScope.launch {
+        var noteToBeDeleted = false
 
-            if (activeNotes.isEmpty()) {
-                spawnNote(chooseRandomNote())
-            } else {
-                activeNotes.forEach {
-                    it.travel()
-                    //New notes only spawn when the last one is removed
-                    //That way the spawn delay is controlled by the speed of the notes
-                    if (it.xPos < clefBuffer) {
-                        noteToBeDeleted = true
-                    }
+        if (activeNotes.isEmpty()) {
+            spawnNote(chooseRandomNote())
+        } else {
+            activeNotes.forEach {
+                it.travel()
+                //New notes only spawn when the last one is removed
+                //That way the spawn delay is controlled by the speed of the notes
+                if (it.xPos < clefBuffer) {
+                    noteToBeDeleted = true
                 }
             }
-            if (noteToBeDeleted) {
-                activeNotes.clear()
-            }
-
         }
+        if (noteToBeDeleted) {
+            activeNotes.clear()
+        }
+
+        //}
 
     }
 

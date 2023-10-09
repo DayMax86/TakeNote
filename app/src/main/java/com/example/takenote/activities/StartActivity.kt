@@ -22,6 +22,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.takenote.screens.DisplayGame
+import com.example.takenote.screens.DisplayNotes
 import com.example.takenote.screens.StartScreen
 import com.example.takenote.ui.ui.TakeNoteTheme
 import com.example.takenote.viewmodels.GameViewModel
@@ -55,7 +56,6 @@ class StartActivity : AppCompatActivity() {
                     Surface(
                         modifier = Modifier
                             .padding(paddingValues)
-                            .fillMaxWidth(),
                     ) {
                         NavHost(
                             navController = navController,

@@ -1,6 +1,6 @@
 package com.example.takenote.screens
 
-import androidx.compose.foundation.border
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,10 +9,15 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.example.takenote.classes.Note
 import com.example.takenote.enums.Notes
@@ -33,7 +38,7 @@ fun DisplayGame(
 
     Box(
         modifier = Modifier
-            //.border(2.dp, Color.Red)
+        //.border(2.dp, Color.Red)
     ) {
         HitZone(
             zoneWidth = zoneWidth,
@@ -58,7 +63,14 @@ fun DisplayGame(
     }
 
     DisplayNotes(
-        viewModel.activeNotes
+        viewModel.activeNotes,
+        Modifier
+            .offset {
+                IntOffset(
+                    x = viewModel.screenWidth,
+                    y = 0,
+                )
+            }
     )
 
 }
@@ -66,9 +78,10 @@ fun DisplayGame(
 @Composable
 fun DisplayNotes(
     activeNotes: ArrayList<Note>,
+    modifier: Modifier,
 ) {
     activeNotes.forEach {
-        NoteBox(it.dimensions)
+        NoteBox(it.dimensions, modifier)
     }
 }
 
