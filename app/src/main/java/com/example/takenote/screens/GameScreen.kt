@@ -1,6 +1,5 @@
 package com.example.takenote.screens
 
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,16 +10,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.example.takenote.classes.Note
-import com.example.takenote.enums.Notes
+import com.example.takenote.enums.NoteNames
 import com.example.takenote.ui.ui.HitZone
 import com.example.takenote.ui.ui.KeyRectangle
 import com.example.takenote.ui.ui.NoteBox
@@ -125,12 +120,12 @@ fun DisplayKeys(
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.Bottom,
     ) {
-        KeyRectangle(Notes.C, whiteKeyWidth)
-        KeyRectangle(Notes.D, whiteKeyWidth)
-        KeyRectangle(Notes.E, whiteKeyWidth)
-        KeyRectangle(Notes.F, whiteKeyWidth)
-        KeyRectangle(Notes.G, whiteKeyWidth)
-        KeyRectangle(Notes.A, whiteKeyWidth)
-        KeyRectangle(Notes.B, whiteKeyWidth)
+        KeyRectangle(NoteNames.C, whiteKeyWidth)
+        KeyRectangle(NoteNames.D, whiteKeyWidth)
+        KeyRectangle(NoteNames.E, whiteKeyWidth)
+        KeyRectangle(NoteNames.F, whiteKeyWidth)
+        KeyRectangle(NoteNames.G, whiteKeyWidth)
+        KeyRectangle(NoteNames.A, whiteKeyWidth)
+        KeyRectangle(NoteNames.B, whiteKeyWidth)
     }
 }

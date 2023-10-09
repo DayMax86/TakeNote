@@ -1,8 +1,9 @@
 package com.example.takenote.classes
 
-import com.example.takenote.enums.Notes
+import androidx.compose.ui.geometry.Rect
+import com.example.takenote.enums.NoteNames
 
-class Note (noteName: Notes) {
+data class Note(val noteName: NoteNames) {
     var travelSpeed: Int = 10
     private val note = noteName
     var xPos: Int = 0
@@ -11,6 +12,15 @@ class Note (noteName: Notes) {
 
     fun travel() {
         this.xPos -= travelSpeed
+    }
+
+    fun getBounds(): Rect {
+        return Rect(
+            left = xPos.toFloat(),
+            right = (xPos + dimensions).toFloat(),
+            top = (yPos + dimensions).toFloat(),
+            bottom = yPos.toFloat(),
+        )
     }
 
 

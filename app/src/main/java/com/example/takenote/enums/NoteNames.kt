@@ -1,5 +1,5 @@
 package com.example.takenote.enums
 
-enum class Notes {
+enum class NoteNames {
     C, D, E, F, G, A, B,
 }
