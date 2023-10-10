@@ -1,11 +1,16 @@
 package com.example.takenote.viewmodels
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Rect
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.example.takenote.classes.Note
 import com.example.takenote.enums.NoteNames
+import com.example.takenote.ui.ui.HitZone
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -24,35 +29,70 @@ class GameViewModel(
     val clefBuffer: Int = scrWidth / 12
     var zoneWidth: Int =
         whiteKeyWidth * difficultyWidthMultiplier //By default the hitbox width is the same as a key width
+    var zoneHeight: Int = staveHeight
 
     var gameRunning: Boolean = true
 
     var activeNotes = ArrayList<Note>()
+    var deadNotes = ArrayList<Note>()
+
+    private val hitZone by mutableStateOf(
+        HitZone(
+            zoneWidth,
+            zoneHeight,
+            clefBuffer,
+            staveHeight,
+        )
+    )
+
 
     init {
         viewModelScope.launch {
             while (gameRunning) {
-                playGame()
-                delay(1000)
+                playGame(hitZone)
+                delay(500)
             }
         }
     }
 
-    private fun playGame() {
+    private fun playGame(zone: HitZone) {
 
-        //Check if any note is currently in the success area
-        checkNoteInZone()
-        //Move the note
-        //activeNotes.forEach {it.travel}
-        //Remove the note if required
-        //if noteToBeDeleted...
+        activeNotes.forEach { note ->
+            //Check if any note is currently in the success area
+            note.inZone = checkNoteInZone(note, zone)
+            //Move the note
+            note.travel()
+            //Check for any missed notes
+            if (checkMissedNote(note, zone)) {
+                deadNotes.add(note)
+            }
+
+        }
+
+
+        //Remove dead notes from activeNotes list
+        deadNotes.forEach { note ->
+            if (activeNotes.contains(note)) {
+                activeNotes.remove(note)
+            }
+        }
+        //Spawn another note if activeNotes is empty
+        if (activeNotes.isEmpty()) {
+            spawnNote(chooseRandomNote())
+        }
         //Affect score
+        //TODO()
 
-
+        //Clear dead notes list
+        deadNotes.clear()
     }
 
-    fun checkNoteInZone(note: Note, zone: Zone): Boolean {
-        return if (note.getBounds().overlaps())
+    private fun checkMissedNote(note: Note, zone: HitZone): Boolean {
+        return (note.xPos < zone.getBounds().left)
+    }
+
+    private fun checkNoteInZone(note: Note, zone: HitZone): Boolean {
+        return note.getBounds().overlaps(zone.getBounds())
     }
 
     private fun chooseRandomNote(
@@ -80,17 +120,18 @@ class GameViewModel(
 
 }
 
-data class HitZone (
+data class HitZone(
     var zoneWidth: Int,
     var zoneHeight: Int,
     var clefBuffer: Int,
+    var staveHeight: Int,
 ) {
     fun getBounds(): Rect {
         return Rect(
             left = clefBuffer.toFloat(),
             right = (clefBuffer + zoneWidth).toFloat(),
-            top = .toFloat(),
-            bottom = .toFloat(),
+            top = (staveHeight + zoneHeight).toFloat(),
+            bottom = staveHeight.toFloat(),
         )
     }
 }

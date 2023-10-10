@@ -9,6 +9,7 @@ data class Note(val noteName: NoteNames) {
     var xPos: Int = 0
     var yPos: Int = 0
     var dimensions: Int = 10
+    var inZone: Boolean = false
 
     fun travel() {
         this.xPos -= travelSpeed
