@@ -1,10 +1,11 @@
 package com.example.takenote.viewmodels
 
+import androidx.compose.ui.geometry.Rect
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.example.takenote.classes.Note
-import com.example.takenote.enums.Notes
+import com.example.takenote.enums.NoteNames
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -38,44 +39,37 @@ class GameViewModel(
     }
 
     private fun playGame() {
-        //viewModelScope.launch {
-        var noteToBeDeleted = false
 
-        if (activeNotes.isEmpty()) {
-            spawnNote(chooseRandomNote())
-        } else {
-            activeNotes.forEach {
-                it.travel()
-                //New notes only spawn when the last one is removed
-                //That way the spawn delay is controlled by the speed of the notes
-                if (it.xPos < clefBuffer) {
-                    noteToBeDeleted = true
-                }
-            }
-        }
-        if (noteToBeDeleted) {
-            activeNotes.clear()
-        }
+        //Check if any note is currently in the success area
+        checkNoteInZone()
+        //Move the note
+        //activeNotes.forEach {it.travel}
+        //Remove the note if required
+        //if noteToBeDeleted...
+        //Affect score
 
-        //}
 
+    }
+
+    fun checkNoteInZone(note: Note, zone: Zone): Boolean {
+        return if (note.getBounds().overlaps())
     }
 
     private fun chooseRandomNote(
         //flats: Boolean,
         //sharps: Boolean,
-    ): Notes {
+    ): NoteNames {
         //Choose a random note from the enum
-        return Notes.values().random()
+        return NoteNames.values().random()
     }
 
     private fun spawnNote(
-        noteName: Notes
+        noteName: NoteNames
     ) {
         //move note in from the right at a certain speed by updating its coordinates
         //make sure coordinates are screen size independent and match the success hitbox
         val note = Note(noteName)
-        note.xPos = screenWidth + note.dimensions
+        note.xPos = screenWidth + note.dimensions //spawn off-screen to the right
         //note.yPos needs to know where the stave lines are and match them with the note names
         //Temporarily hardcode a yPos value
         note.yPos = screenHeight / 2
@@ -84,4 +78,19 @@ class GameViewModel(
     }
 
 
+}
+
+data class HitZone (
+    var zoneWidth: Int,
+    var zoneHeight: Int,
+    var clefBuffer: Int,
+) {
+    fun getBounds(): Rect {
+        return Rect(
+            left = clefBuffer.toFloat(),
+            right = (clefBuffer + zoneWidth).toFloat(),
+            top = .toFloat(),
+            bottom = .toFloat(),
+        )
+    }
 }
