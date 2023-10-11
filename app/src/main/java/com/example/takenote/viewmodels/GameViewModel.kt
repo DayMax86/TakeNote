@@ -1,5 +1,7 @@
 package com.example.takenote.viewmodels
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -69,6 +71,12 @@ class GameViewModel(
                 deadNotes.add(note)
             }
 
+            //TESTING----------
+//            if (note.xPos < zone.getBounds().right) {
+//                Log.d("gvm", "NOTE IN ZONE!!!!")
+//            }
+            //-----------------
+
         }
 
 
@@ -94,7 +102,7 @@ class GameViewModel(
     }
 
     private fun checkNoteInZone(note: Note, zone: HitZone): Boolean {
-        return note.getBounds().overlaps(zone.getBounds())
+        return note.xPos <= zone.getBounds().right
     }
 
     private fun chooseRandomNote(
@@ -120,7 +128,26 @@ class GameViewModel(
     }
 
 
+    fun onKeyPress (note: NoteNames) {
+        activeNotes.forEach {activeNote ->
+            if (activeNote.inZone) {
+                if (activeNote.noteName == note){
+                    //Successful hit of the note! Celebrate()!!
+                    Log.v("gvm", "NOTE HIT!!! WooHoo!")
+                } else {
+                    //Note was in zone but wrong key pressed
+                    Log.e("gvm", "Note in zone but wrong key!")
+                }
+            } else {
+                //Note wasn't in zone
+                Log.e("gvm", "Note not in zone!")
+            }
+        }
+    }
 }
+
+
+
 
 data class HitZone(
     var zoneWidth: Int,
@@ -132,8 +159,8 @@ data class HitZone(
         return Rect(
             left = clefBuffer.toFloat(),
             right = (clefBuffer + zoneWidth).toFloat(),
-            top = (staveHeight + zoneHeight).toFloat(),
-            bottom = staveHeight.toFloat(),
+            top = staveHeight.toFloat(),
+            bottom = 0f,
         )
     }
 }

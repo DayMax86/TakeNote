@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -41,17 +43,6 @@ fun DisplayGame(
     staveHeight: Int,
 ) {
 
-    /*
-    *
-    * -----------------TESTING----------------------------
-    */
-
-    //Draw the bounding rectangles so we can see if the overlap method works
-    //Or if the bounding rectangles even match up to the objects themselves
-
-    /*
-    *------------------------------------------------------
-    * */
 
     Box(
         modifier = Modifier
@@ -75,7 +66,8 @@ fun DisplayGame(
             staveHeight = staveHeight
         )
         DisplayKeys(
-            whiteKeyWidth = whiteKeyWidth
+            whiteKeyWidth = whiteKeyWidth,
+            viewModel = viewModel,
         )
     }
 
@@ -136,6 +128,7 @@ fun DisplayStave(
 
 @Composable
 fun DisplayKeys(
+    viewModel: GameViewModel,
     whiteKeyWidth: Int,
 ) {
     Row(
@@ -146,12 +139,12 @@ fun DisplayKeys(
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.Bottom,
     ) {
-        KeyRectangle(NoteNames.C, whiteKeyWidth)
-        KeyRectangle(NoteNames.D, whiteKeyWidth)
-        KeyRectangle(NoteNames.E, whiteKeyWidth)
-        KeyRectangle(NoteNames.F, whiteKeyWidth)
-        KeyRectangle(NoteNames.G, whiteKeyWidth)
-        KeyRectangle(NoteNames.A, whiteKeyWidth)
-        KeyRectangle(NoteNames.B, whiteKeyWidth)
+        KeyRectangle(NoteNames.C, whiteKeyWidth) { viewModel.onKeyPress(NoteNames.C) }
+        KeyRectangle(NoteNames.D, whiteKeyWidth) { viewModel.onKeyPress(NoteNames.D) }
+        KeyRectangle(NoteNames.E, whiteKeyWidth) { viewModel.onKeyPress(NoteNames.E) }
+        KeyRectangle(NoteNames.F, whiteKeyWidth) { viewModel.onKeyPress(NoteNames.F) }
+        KeyRectangle(NoteNames.G, whiteKeyWidth) { viewModel.onKeyPress(NoteNames.G) }
+        KeyRectangle(NoteNames.A, whiteKeyWidth) { viewModel.onKeyPress(NoteNames.A) }
+        KeyRectangle(NoteNames.B, whiteKeyWidth) { viewModel.onKeyPress(NoteNames.B) }
     }
 }
