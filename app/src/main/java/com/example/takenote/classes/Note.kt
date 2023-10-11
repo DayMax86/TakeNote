@@ -10,7 +10,7 @@ import androidx.compose.ui.geometry.Rect
 import com.example.takenote.enums.NoteNames
 
 data class Note(val noteName: NoteNames, val screenWidth: Int) {
-    var travelSpeed: Int = 10
+    var travelSpeed: Int = 2
     private val note = noteName
     var xPos by mutableIntStateOf(screenWidth)
     var yPos: Int = 0

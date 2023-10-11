@@ -1,5 +1,7 @@
 package com.example.takenote.screens
 
+import android.graphics.drawable.shapes.RectShape
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,7 +18,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.example.takenote.classes.Note
@@ -36,6 +41,18 @@ fun DisplayGame(
     staveHeight: Int,
 ) {
 
+    /*
+    *
+    * -----------------TESTING----------------------------
+    */
+
+    //Draw the bounding rectangles so we can see if the overlap method works
+    //Or if the bounding rectangles even match up to the objects themselves
+
+    /*
+    *------------------------------------------------------
+    * */
+
     Box(
         modifier = Modifier
         //.border(2.dp, Color.Red)
@@ -43,7 +60,7 @@ fun DisplayGame(
         HitZone(
             zoneWidth = zoneWidth,
             zoneHeight = staveHeight,
-            clefBuffer = clefBuffer
+            clefBuffer = clefBuffer,
         )
 
     }
@@ -62,12 +79,9 @@ fun DisplayGame(
         )
     }
 
-
     DisplayNotes(
         viewModel.activeNotes,
-
     )
-
 
 }
 
@@ -77,8 +91,15 @@ fun DisplayNotes(
 ) {
     activeNotes.forEach {
         val modifier = Modifier
-            .offset(x = it.xPos.dp)
-            .border(1.dp, Color.Red)
+            .offset(x = it.xPos.dp, y = it.yPos.dp)
+            .border(
+                3.dp,
+                if (!it.inZone) {
+                    Color.Red
+                } else {
+                    Color.Yellow
+                }
+            )
             .size(it.dimensions.dp, it.dimensions.dp)
             .clip(RoundedCornerShape(1.dp))
         NoteBox(modifier)

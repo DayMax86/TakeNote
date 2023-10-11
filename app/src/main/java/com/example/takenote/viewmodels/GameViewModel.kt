@@ -36,7 +36,7 @@ class GameViewModel(
     val activeNotes = ArrayList<Note>()
     var deadNotes = ArrayList<Note>()
 
-    private val hitZone by mutableStateOf(
+    val hitZone by mutableStateOf( //Temporarily public for testing //TODO()
         HitZone(
             zoneWidth,
             zoneHeight,
@@ -52,7 +52,7 @@ class GameViewModel(
                 //Manually force recompose of notes
 
                 playGame(hitZone)
-                delay(500) //TODO()
+                delay(10)
             }
         }
     }
@@ -114,7 +114,7 @@ class GameViewModel(
         note.xPos = (screenWidth + note.dimensions)   //spawn off-screen to the right
         //note.yPos needs to know where the stave lines are and match them with the note names
         //Temporarily hardcode a yPos value
-        note.yPos = screenHeight / 2
+        note.yPos = staveHeight / 2
         //---------------------------------
         activeNotes.add(note)
     }
