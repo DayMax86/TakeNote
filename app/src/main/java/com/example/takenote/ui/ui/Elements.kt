@@ -22,15 +22,11 @@ import com.example.takenote.enums.NoteNames
 
 @Composable
 fun NoteBox(
-    dimensions: Int,
     modifier: Modifier,
 ) {
 
     Box(
         modifier = modifier
-            .border(1.dp, Color.Red)
-            .size(dimensions.dp, dimensions.dp)
-            .clip(RoundedCornerShape(1.dp))
     )
 }
 

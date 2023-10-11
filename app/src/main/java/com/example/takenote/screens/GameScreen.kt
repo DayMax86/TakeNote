@@ -1,5 +1,6 @@
 package com.example.takenote.screens
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,9 +10,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.example.takenote.classes.Note
@@ -57,26 +62,26 @@ fun DisplayGame(
         )
     }
 
+
     DisplayNotes(
         viewModel.activeNotes,
-        Modifier
-            .offset {
-                IntOffset(
-                    x = viewModel.screenWidth,
-                    y = 0,
-                )
-            }
+
     )
+
 
 }
 
 @Composable
 fun DisplayNotes(
     activeNotes: ArrayList<Note>,
-    modifier: Modifier,
 ) {
     activeNotes.forEach {
-        NoteBox(it.dimensions, modifier)
+        val modifier = Modifier
+            .offset(x = it.xPos.dp)
+            .border(1.dp, Color.Red)
+            .size(it.dimensions.dp, it.dimensions.dp)
+            .clip(RoundedCornerShape(1.dp))
+        NoteBox(modifier)
     }
 }
 
