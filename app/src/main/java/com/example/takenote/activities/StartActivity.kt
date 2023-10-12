@@ -5,7 +5,6 @@ import android.util.DisplayMetrics
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.DrawerValue
 import androidx.compose.material.Scaffold
@@ -15,14 +14,15 @@ import androidx.compose.material.rememberDrawerState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.takenote.screens.DisplayGame
-import com.example.takenote.screens.DisplayNotes
 import com.example.takenote.screens.StartScreen
 import com.example.takenote.ui.ui.TakeNoteTheme
 import com.example.takenote.viewmodels.GameViewModel
@@ -38,6 +38,11 @@ class StartActivity : AppCompatActivity() {
             val navController = rememberNavController()
             val viewModel = remember { StartViewModel(navController) }
             val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Closed))
+            val showTopBar = rememberSaveable { mutableStateOf(true) }
+
+            fun toggleTopBar() {
+                showTopBar.value = !showTopBar.value
+            }
 
             val displayMetrics = DisplayMetrics()
             windowManager.defaultDisplay.getMetrics(displayMetrics)
@@ -47,12 +52,17 @@ class StartActivity : AppCompatActivity() {
 
             TakeNoteTheme() {
                 supportActionBar?.hide()
-                Scaffold(scaffoldState = scaffoldState, topBar = {
-                    CenterAlignedTopAppBar(
-                        modifier = Modifier.background(Color.Transparent),
-                        title = { Text("My Title") },
-                    )
-                }) { paddingValues ->
+                Scaffold(
+                    scaffoldState = scaffoldState,
+                    topBar = {
+                        if (showTopBar.value) {
+                            CenterAlignedTopAppBar(
+                                modifier = Modifier.background(Color.Transparent),
+                                title = { Text("My Title") },
+                            )
+                        }
+                    }
+                ) { paddingValues ->
                     Surface(
                         modifier = Modifier
                             .padding(paddingValues)
@@ -75,7 +85,7 @@ class StartActivity : AppCompatActivity() {
                                         navController,
                                         screenWidth,
                                         screenHeight,
-                                    )
+                                    ) { toggleTopBar() }
                                 }
                                 DisplayGame(
                                     gameViewModel,
@@ -83,7 +93,7 @@ class StartActivity : AppCompatActivity() {
                                     gameViewModel.clefBuffer,
                                     gameViewModel.zoneWidth,
                                     gameViewModel.staveHeight,
-                                )
+                                ) { toggleTopBar() }
 
                             }
                         }

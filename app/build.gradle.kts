@@ -51,7 +51,7 @@ android {
 dependencies {
 
     // Compose
-    implementation("com.google.android.material:material:1.9.0")
+    implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.compose.ui:ui:1.5.3")
     implementation("androidx.compose.material:material:1.5.3")
@@ -68,7 +68,7 @@ dependencies {
     implementation("io.coil-kt:coil-svg:2.4.0")
 
     //SVG support
-    implementation("com.android.support:appcompat-v7:23.2.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")

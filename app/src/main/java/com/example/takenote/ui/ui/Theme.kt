@@ -9,6 +9,7 @@ fun TakeNoteTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
+    var showTopBar: Boolean = true
     MaterialTheme(
         content = content,
 

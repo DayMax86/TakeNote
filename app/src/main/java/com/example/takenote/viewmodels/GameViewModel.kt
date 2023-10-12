@@ -1,18 +1,14 @@
 package com.example.takenote.viewmodels
 
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Rect
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.example.takenote.classes.Note
 import com.example.takenote.enums.NoteNames
-import com.example.takenote.ui.ui.HitZone
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -20,13 +16,14 @@ class GameViewModel(
     private val navController: NavHostController,
     scrWidth: Int,
     scrHeight: Int,
+    toggleTopBar: () -> Unit,
 ) : ViewModel() {
 
     var screenWidth: Int = scrWidth
     var screenHeight: Int = scrHeight
     private var difficultyWidthMultiplier =
         1 //reduce this value (always > 0) to increase difficulty
-    val staveHeight: Float = (scrHeight.toFloat() / 120f * 10f)
+    val staveHeight: Float = (scrHeight.toFloat() / 200f * 10f)
     var whiteKeyWidth: Int = scrWidth / 150 * 7
     val clefBuffer: Int = scrWidth / 12
     var zoneWidth: Int =
@@ -49,8 +46,8 @@ class GameViewModel(
         )
     )
 
-
     init {
+        toggleTopBar()
         viewModelScope.launch {
             while (gameRunning) {
                 //Manually force recompose of notes
@@ -59,6 +56,10 @@ class GameViewModel(
                 delay(10)
             }
         }
+    }
+
+    fun navigateBack() {
+        navController.popBackStack()
     }
 
     private fun playGame(zone: HitZone) {

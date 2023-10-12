@@ -1,6 +1,7 @@
 package com.example.takenote.screens
 
 import android.graphics.drawable.shapes.RectShape
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -43,51 +45,66 @@ fun DisplayGame(
     clefBuffer: Int,
     zoneWidth: Int,
     staveHeight: Float,
+    backBehaviour: () -> Unit,
 ) {
+    Column {
 
-
-    Box(
-        modifier = Modifier
-            .height(staveHeight.dp)
-            .width(clefBuffer.dp),
-    ) {
-        Clef(
+        Spacer(
+            modifier = Modifier
+                .padding(20.dp)
+                .height(50.dp)
+                //.border(2.dp, Color.Cyan)
+                .fillMaxWidth()
+        )
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-        )
+        ) {
+            Clef(
+                modifier = Modifier
+                    //.border(2.dp, Color.Red)
+                    .height((staveHeight * 1.5).dp)
+                    .width(clefBuffer.dp)
+                    .offset(y = -((staveHeight / 10) * 2).dp),
+            )
+
+            Box(
+                modifier = Modifier
+                //.border(2.dp, Color.Red)
+            ) {
+                HitZone(
+                    zoneWidth = zoneWidth,
+                    zoneHeight = staveHeight.toInt(),
+                    clefBuffer = clefBuffer,
+                )
+
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.SpaceEvenly
+            ) {
+                DisplayStave(
+                    clefBuffer = clefBuffer,
+                    staveHeight = staveHeight.toInt()
+                )
+                DisplayKeys(
+                    whiteKeyWidth = whiteKeyWidth,
+                    viewModel = viewModel,
+                )
+            }
+
+            DisplayNotes(
+                viewModel.activeNotes,
+            )
+
+            BackHandler {
+                backBehaviour()
+                viewModel.navigateBack()
+            }
+        }
     }
-
-    Box(
-        modifier = Modifier
-        //.border(2.dp, Color.Red)
-    ) {
-        HitZone(
-            zoneWidth = zoneWidth,
-            zoneHeight = staveHeight.toInt(),
-            clefBuffer = clefBuffer,
-        )
-
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.SpaceEvenly
-    ) {
-        DisplayStave(
-            clefBuffer = clefBuffer,
-            staveHeight = staveHeight.toInt()
-        )
-        DisplayKeys(
-            whiteKeyWidth = whiteKeyWidth,
-            viewModel = viewModel,
-        )
-    }
-
-    DisplayNotes(
-        viewModel.activeNotes,
-    )
-
 }
 
 @Composable
@@ -105,7 +122,7 @@ fun DisplayNotes(
                     Color.Red
                 }
             )
-            .size(it.dimensions.dp, it.dimensions.dp)
+            .size((it.dimensions).dp, (it.dimensions).dp)
         //.clip(RoundedCornerShape(13.dp))
         //.background(Color.Black)
         NoteBox(it.noteName, modifier)

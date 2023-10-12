@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -38,6 +39,7 @@ fun NoteBox(
 
     Box(
         modifier = modifier
+            .wrapContentSize()
     ) {
         AsyncImage(
             modifier = Modifier
@@ -57,6 +59,7 @@ fun Clef(modifier: Modifier) {
             .decoderFactory(SvgDecoder.Factory())
             .build(),
         contentDescription = null,
+        alignment = Alignment.Center,
         )
 }
 
@@ -90,7 +93,7 @@ fun StaveBar(
         modifier = Modifier
             .padding()
             .fillMaxWidth()
-            .height(5.dp)
+            .height(3.dp)
             .background(Color.Black)
     ) {
 
