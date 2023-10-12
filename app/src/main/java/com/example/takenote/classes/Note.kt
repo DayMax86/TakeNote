@@ -13,12 +13,12 @@ data class Note(val noteName: NoteNames, val screenWidth: Int) {
     var travelSpeed: Int = 2
     private val note = noteName
     var xPos by mutableIntStateOf(screenWidth)
-    var yPos: Int = 0
-    var dimensions: Int = 10
+    var yPos: Float = 0f
+    var dimensions: Int = 20
     var inZone: Boolean = false
 
-    fun travel() {
-        this.xPos -= travelSpeed
+    fun travel(speed: Int) {
+        this.xPos -= speed
     }
 
     fun getBounds(): Rect {

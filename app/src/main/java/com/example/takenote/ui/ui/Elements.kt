@@ -25,12 +25,19 @@ import com.example.takenote.enums.NoteNames
 
 @Composable
 fun NoteBox(
+    noteName: NoteNames,
     modifier: Modifier,
 ) {
 
     Box(
         modifier = modifier
-    )
+    ) {
+        Text(
+            modifier = Modifier
+                .align(Alignment.Center),
+            text = noteName.toString()
+        )
+    }
 }
 
 @Composable

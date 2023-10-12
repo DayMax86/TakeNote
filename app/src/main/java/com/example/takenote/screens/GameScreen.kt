@@ -2,6 +2,7 @@ package com.example.takenote.screens
 
 import android.graphics.drawable.shapes.RectShape
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -40,7 +41,7 @@ fun DisplayGame(
     whiteKeyWidth: Int,
     clefBuffer: Int,
     zoneWidth: Int,
-    staveHeight: Int,
+    staveHeight: Float,
 ) {
 
 
@@ -50,7 +51,7 @@ fun DisplayGame(
     ) {
         HitZone(
             zoneWidth = zoneWidth,
-            zoneHeight = staveHeight,
+            zoneHeight = staveHeight.toInt(),
             clefBuffer = clefBuffer,
         )
 
@@ -63,7 +64,7 @@ fun DisplayGame(
     ) {
         DisplayStave(
             clefBuffer = clefBuffer,
-            staveHeight = staveHeight
+            staveHeight = staveHeight.toInt()
         )
         DisplayKeys(
             whiteKeyWidth = whiteKeyWidth,
@@ -85,16 +86,17 @@ fun DisplayNotes(
         val modifier = Modifier
             .offset(x = it.xPos.dp, y = it.yPos.dp)
             .border(
-                3.dp,
+                1.dp,
                 if (!it.inZone) {
-                    Color.Red
+                    Color.Unspecified
                 } else {
-                    Color.Yellow
+                    Color.Red
                 }
             )
-            .size(it.dimensions.dp, it.dimensions.dp)
-            .clip(RoundedCornerShape(1.dp))
-        NoteBox(modifier)
+            .size((it.dimensions * 1.05).dp, (it.dimensions).dp)
+            .clip(RoundedCornerShape(13.dp))
+            .background(Color.Black)
+        NoteBox(it.noteName, modifier)
     }
 }
 
@@ -113,7 +115,7 @@ fun DisplayStave(
         Column(
             modifier = Modifier
                 .fillMaxHeight(),
-            verticalArrangement = Arrangement.SpaceEvenly
+            verticalArrangement = Arrangement.SpaceAround
         ) {
             //Stave goes in here
             //Column composed of 5 stave bars
