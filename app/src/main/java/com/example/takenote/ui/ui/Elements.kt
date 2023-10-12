@@ -1,10 +1,12 @@
 package com.example.takenote.ui.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,7 +20,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.decode.SvgDecoder
+import coil.request.ImageRequest
+import com.example.takenote.R
 import com.example.takenote.classes.Note
 import com.example.takenote.enums.NoteNames
 
@@ -32,12 +39,25 @@ fun NoteBox(
     Box(
         modifier = modifier
     ) {
-        Text(
+        AsyncImage(
             modifier = Modifier
-                .align(Alignment.Center),
-            text = noteName.toString()
+                .fillMaxSize(),
+            model = R.drawable.transparent_note,
+            contentDescription = null,
         )
     }
+}
+
+@Composable
+fun Clef(modifier: Modifier) {
+    AsyncImage(
+        modifier = modifier,
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(R.drawable.treble_clef)
+            .decoderFactory(SvgDecoder.Factory())
+            .build(),
+        contentDescription = null,
+        )
 }
 
 @Composable
@@ -54,7 +74,7 @@ fun KeyRectangle(
             .background(color = Color.Gray)
             .clip(RoundedCornerShape(10.dp))
             .clickable {
-                       onClick()
+                onClick()
             },
         contentAlignment = Alignment.Center,
     ) {

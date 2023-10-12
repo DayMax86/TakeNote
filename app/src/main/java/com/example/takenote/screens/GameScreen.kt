@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.example.takenote.classes.Note
 import com.example.takenote.enums.NoteNames
+import com.example.takenote.ui.ui.Clef
 import com.example.takenote.ui.ui.HitZone
 import com.example.takenote.ui.ui.KeyRectangle
 import com.example.takenote.ui.ui.NoteBox
@@ -44,6 +45,17 @@ fun DisplayGame(
     staveHeight: Float,
 ) {
 
+
+    Box(
+        modifier = Modifier
+            .height(staveHeight.dp)
+            .width(clefBuffer.dp),
+    ) {
+        Clef(
+            modifier = Modifier
+                .fillMaxSize()
+        )
+    }
 
     Box(
         modifier = Modifier
@@ -93,9 +105,9 @@ fun DisplayNotes(
                     Color.Red
                 }
             )
-            .size((it.dimensions * 1.05).dp, (it.dimensions).dp)
-            .clip(RoundedCornerShape(13.dp))
-            .background(Color.Black)
+            .size(it.dimensions.dp, it.dimensions.dp)
+        //.clip(RoundedCornerShape(13.dp))
+        //.background(Color.Black)
         NoteBox(it.noteName, modifier)
     }
 }
