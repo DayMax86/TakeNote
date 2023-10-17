@@ -1,8 +1,10 @@
 package com.example.takenote.ui.ui
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -65,14 +68,17 @@ fun KeyRectangle(
     key: Key,
     onClick: () -> Unit
 ) {
+    Log.i("geoff", "Re-composing key rect")
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(15.dp))
             .border(1.dp, Color.LightGray,RoundedCornerShape(15.dp))
             .width(key.width.dp)
             .fillMaxHeight(0.8f)
-            .background(color = key.getBackgroundColor())
-            .clickable {
+            .background(color = key.backgroundColor)
+            .clickable(
+                //interactionSource = remember{MutableInteractionSource()},
+            ) {
                 onClick()
             },
         contentAlignment = Alignment.Center,

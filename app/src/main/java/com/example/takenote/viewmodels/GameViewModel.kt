@@ -3,6 +3,7 @@ package com.example.takenote.viewmodels
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Rect
@@ -38,7 +39,7 @@ class GameViewModel(
 
     var gameRunning: Boolean = true
 
-    var keysArray = ArrayList<Key>()
+    var keysArray: MutableList<Key> = mutableStateListOf()
 
     val activeNotes = ArrayList<Note>()
     var deadNotes = ArrayList<Note>()
@@ -66,11 +67,10 @@ class GameViewModel(
     }
 
     private fun populateKeysArray() {
-        val key = Key(NoteNames.C)
-        for (noteName in NoteNames.values()) {
+        NoteNames.values().forEach {
             keysArray.add(
-                key.copy(
-                    note = noteName,
+                Key (
+                    note = it,
                     width = whiteKeyWidth,
                 )
             )
@@ -176,6 +176,8 @@ class GameViewModel(
 
 
     fun onKeyPress(key: Key) {
+        val index = keysArray.indexOf(key)
+
         //Change the colour of the key so the user can see that it was pressed
         viewModelScope.launch {
             activeNotes.forEach { activeNote ->
@@ -183,37 +185,29 @@ class GameViewModel(
                     if (activeNote.noteName == key.note) {
                         //Successful hit of the note! Celebrate()!!
                         Log.v("gvm", "Successful hit")
-                        key.backgroundColor.value = Color.Green
+                        keysArray[index] = key.copy(backgroundColor = Color.Green)
                     } else {
                         //Note was in zone but wrong key pressed
                         Log.v("gvm", "In zone but missed")
-                        key.backgroundColor.value = Color.Red
+                        keysArray[index] = key.copy(backgroundColor = Color.Red)
                     }
                 } else {
                     //Note wasn't in zone
                     Log.v("gvm", "Not even in the zone")
-                    key.highlightKey(Color.Blue)
+                    keysArray[index] = key.copy(backgroundColor = Color.Blue)
                 }
             }
             delay(100)
-            key.backgroundColor.value = Color.White
+            keysArray[index] = key.copy(backgroundColor = Color.White)
         }
     }
 }
 
 data class Key(
     val note: NoteNames,
-    val backgroundColor: MutableState<Color> = mutableStateOf(Color.White),
-    var width: Int = 10,
-) {
-    fun getBackgroundColor(): Color {
-        return this.backgroundColor.value
-    }
-
-    fun highlightKey(color: Color) {
-        this.backgroundColor.value = color
-    }
-}
+    val backgroundColor: Color = Color.White,
+    val width: Int = 10,
+)
 
 data class HitZone(
     var zoneWidth: Int,
