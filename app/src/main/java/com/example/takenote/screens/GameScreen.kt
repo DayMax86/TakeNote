@@ -1,9 +1,6 @@
 package com.example.takenote.screens
 
-import android.graphics.drawable.shapes.RectShape
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,16 +15,10 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.example.takenote.classes.Note
 import com.example.takenote.enums.NoteNames
@@ -51,7 +42,7 @@ fun DisplayGame(
 
         Spacer(
             modifier = Modifier
-                .padding(20.dp)
+                .padding(20.dp) //Make this relative to screen size //TODO()
                 .height(50.dp)
                 //.border(2.dp, Color.Cyan)
                 .fillMaxWidth()
@@ -122,7 +113,10 @@ fun DisplayNotes(
                     Color.Red
                 }
             )
-            .size((it.dimensions).dp, (it.dimensions).dp)
+            .size(
+                (it.dimensions).dp,
+                (it.dimensions).dp
+            ) //Note needs to be bigger to match space between stave bars//TODO()
         //.clip(RoundedCornerShape(13.dp))
         //.background(Color.Black)
         NoteBox(it.noteName, modifier)
@@ -170,12 +164,10 @@ fun DisplayKeys(
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.Bottom,
     ) {
-        KeyRectangle(NoteNames.C, whiteKeyWidth) { viewModel.onKeyPress(NoteNames.C) }
-        KeyRectangle(NoteNames.D, whiteKeyWidth) { viewModel.onKeyPress(NoteNames.D) }
-        KeyRectangle(NoteNames.E, whiteKeyWidth) { viewModel.onKeyPress(NoteNames.E) }
-        KeyRectangle(NoteNames.F, whiteKeyWidth) { viewModel.onKeyPress(NoteNames.F) }
-        KeyRectangle(NoteNames.G, whiteKeyWidth) { viewModel.onKeyPress(NoteNames.G) }
-        KeyRectangle(NoteNames.A, whiteKeyWidth) { viewModel.onKeyPress(NoteNames.A) }
-        KeyRectangle(NoteNames.B, whiteKeyWidth) { viewModel.onKeyPress(NoteNames.B) }
+        viewModel.keysArray.forEach { key ->
+            KeyRectangle(key.note, whiteKeyWidth, key.backgroundColor) {
+                viewModel.onKeyPress(key)
+            }
+        }
     }
 }

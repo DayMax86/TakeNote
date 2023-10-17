@@ -1,9 +1,12 @@
 package com.example.takenote.viewmodels
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
@@ -24,7 +27,8 @@ class GameViewModel(
     private var difficultyWidthMultiplier =
         1 //reduce this value (always > 0) to increase difficulty
     val staveHeight: Float = (scrHeight.toFloat() / 200f * 10f)
-    var whiteKeyWidth: Int = scrWidth / 150 * 7
+    var whiteKeyWidth: Int = scrWidth / 135 * 7
+    var keyBackgroundColor by mutableStateOf(Color.White)
     val clefBuffer: Int = scrWidth / 12
     var zoneWidth: Int =
         whiteKeyWidth * difficultyWidthMultiplier //By default the hitbox width is the same as a key width
@@ -33,6 +37,8 @@ class GameViewModel(
     var travelSpeed: Int = 3 //Make this proportionate to note/stave dimensions TODO()
 
     var gameRunning: Boolean = true
+
+    var keysArray = ArrayList<Key>()
 
     val activeNotes = ArrayList<Note>()
     var deadNotes = ArrayList<Note>()
@@ -47,6 +53,7 @@ class GameViewModel(
     )
 
     init {
+        populateKeysArray()
         toggleTopBar()
         viewModelScope.launch {
             while (gameRunning) {
@@ -56,6 +63,17 @@ class GameViewModel(
                 delay(10)
             }
         }
+    }
+
+    private fun populateKeysArray() {
+        keysArray.add(Key(NoteNames.C))
+        keysArray.add(Key(NoteNames.D))
+        keysArray.add(Key(NoteNames.E))
+        keysArray.add(Key(NoteNames.F))
+        keysArray.add(Key(NoteNames.G))
+        keysArray.add(Key(NoteNames.A))
+        keysArray.add(Key(NoteNames.B))
+        //Sharps/flats can be added later
     }
 
     fun navigateBack() {
@@ -118,21 +136,27 @@ class GameViewModel(
         val note = Note(noteName, screenWidth)
         note.xPos = (screenWidth)   //spawn off-screen to the right
         //note.yPos needs to know where the stave lines are and match them with the note names
-        note.dimensions = ((staveHeight / 10)*2).toInt()
+        note.dimensions = ((staveHeight / 10) * 2).toInt()
 
         note.yPos = when (noteName) {
             NoteNames.C ->
                 ((staveHeight / 10) * 2)
+
             NoteNames.D ->
                 ((staveHeight / 10) * 3)
+
             NoteNames.E ->
                 ((staveHeight / 10) * 8)
+
             NoteNames.F ->
                 ((staveHeight / 10) * 7)
+
             NoteNames.G ->
                 ((staveHeight / 10) * 6)
+
             NoteNames.A ->
                 ((staveHeight / 10) * 5)
+
             NoteNames.B ->
                 ((staveHeight / 10) * 4)
         }
@@ -141,24 +165,49 @@ class GameViewModel(
     }
 
 
-    fun onKeyPress(note: NoteNames) {
-        activeNotes.forEach { activeNote ->
-            if (activeNote.inZone) {
-                if (activeNote.noteName == note) {
-                    //Successful hit of the note! Celebrate()!!
-                    Log.v("gvm", "NOTE HIT!!! WooHoo!")
+    fun onKeyPress(key: Key) {
+        //Change the colour of the key so the user can see that it was pressed
+        viewModelScope.launch {
+            activeNotes.forEach { activeNote ->
+                if (activeNote.inZone) {
+                    if (activeNote.noteName == key.note) {
+                        //Successful hit of the note! Celebrate()!!
+                        Log.v("gvm", "Successful hit")
+                        key.backgroundColor = Color.Green
+                    } else {
+                        //Note was in zone but wrong key pressed
+                        Log.v("gvm", "In zone but missed")
+                        key.backgroundColor = Color.Red
+                    }
                 } else {
-                    //Note was in zone but wrong key pressed
-                    Log.e("gvm", "Note in zone but wrong key!")
+                    //Note wasn't in zone
+                    Log.v("gvm", "Not even in the zone")
+                    key.backgroundColor = Color.Blue
                 }
-            } else {
-                //Note wasn't in zone
-                Log.e("gvm", "Note not in zone!")
             }
+            delay(100)
+            key.backgroundColor = Color.White
         }
     }
 }
 
+data class Key(
+    val note: NoteNames,
+    var backgroundColor: Color = Color.White //Make this mutable to force recompose?
+) {
+    init {
+        //Assign unique ID to each key so onPress knows which key to change
+        val id: Int = when (note) {
+            NoteNames.C -> 0
+            NoteNames.D -> 1
+            NoteNames.E -> 2
+            NoteNames.F -> 3
+            NoteNames.G -> 4
+            NoteNames.A -> 5
+            NoteNames.B -> 6
+        }
+    }
+}
 
 data class HitZone(
     var zoneWidth: Int,

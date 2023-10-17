@@ -1,6 +1,5 @@
 package com.example.takenote.ui.ui
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -10,11 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,7 +23,6 @@ import coil.compose.AsyncImage
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import com.example.takenote.R
-import com.example.takenote.classes.Note
 import com.example.takenote.enums.NoteNames
 
 
@@ -39,7 +34,7 @@ fun NoteBox(
 
     Box(
         modifier = modifier
-            .wrapContentSize()
+            .fillMaxSize()
     ) {
         AsyncImage(
             modifier = Modifier
@@ -67,15 +62,16 @@ fun Clef(modifier: Modifier) {
 fun KeyRectangle(
     note: NoteNames,
     noteWidth: Int,
+    keyBackgroundColor: Color,
     onClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
-            .border(1.dp, Color.Yellow)
+            .clip(RoundedCornerShape(15.dp))
+            .border(1.dp, Color.LightGray,RoundedCornerShape(15.dp))
             .width(noteWidth.dp)
             .fillMaxHeight(0.8f)
-            .background(color = Color.Gray)
-            .clip(RoundedCornerShape(10.dp))
+            .background(color = keyBackgroundColor)
             .clickable {
                 onClick()
             },
