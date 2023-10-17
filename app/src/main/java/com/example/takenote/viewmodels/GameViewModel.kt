@@ -66,14 +66,24 @@ class GameViewModel(
     }
 
     private fun populateKeysArray() {
-        keysArray.add(Key(NoteNames.C))
-        keysArray.add(Key(NoteNames.D))
-        keysArray.add(Key(NoteNames.E))
-        keysArray.add(Key(NoteNames.F))
-        keysArray.add(Key(NoteNames.G))
-        keysArray.add(Key(NoteNames.A))
-        keysArray.add(Key(NoteNames.B))
-        //Sharps/flats can be added later
+        val key = Key(NoteNames.C)
+        for (noteName in NoteNames.values()) {
+            keysArray.add(
+                key.copy(
+                    note = noteName,
+                    width = whiteKeyWidth,
+                )
+            )
+        }
+
+//        keysArray.add(Key(NoteNames.E))
+//        keysArray.add(Key(NoteNames.F))
+//        keysArray.add(Key(NoteNames.G))
+//        keysArray.add(Key(NoteNames.C))
+//        keysArray.add(Key(NoteNames.D))
+//        keysArray.add(Key(NoteNames.A))
+//        keysArray.add(Key(NoteNames.B))
+//        //Sharps/flats can be added later
     }
 
     fun navigateBack() {
@@ -173,39 +183,35 @@ class GameViewModel(
                     if (activeNote.noteName == key.note) {
                         //Successful hit of the note! Celebrate()!!
                         Log.v("gvm", "Successful hit")
-                        key.backgroundColor = Color.Green
+                        key.backgroundColor.value = Color.Green
                     } else {
                         //Note was in zone but wrong key pressed
                         Log.v("gvm", "In zone but missed")
-                        key.backgroundColor = Color.Red
+                        key.backgroundColor.value = Color.Red
                     }
                 } else {
                     //Note wasn't in zone
                     Log.v("gvm", "Not even in the zone")
-                    key.backgroundColor = Color.Blue
+                    key.highlightKey(Color.Blue)
                 }
             }
             delay(100)
-            key.backgroundColor = Color.White
+            key.backgroundColor.value = Color.White
         }
     }
 }
 
 data class Key(
     val note: NoteNames,
-    var backgroundColor: Color = Color.White //Make this mutable to force recompose?
+    val backgroundColor: MutableState<Color> = mutableStateOf(Color.White),
+    var width: Int = 10,
 ) {
-    init {
-        //Assign unique ID to each key so onPress knows which key to change
-        val id: Int = when (note) {
-            NoteNames.C -> 0
-            NoteNames.D -> 1
-            NoteNames.E -> 2
-            NoteNames.F -> 3
-            NoteNames.G -> 4
-            NoteNames.A -> 5
-            NoteNames.B -> 6
-        }
+    fun getBackgroundColor(): Color {
+        return this.backgroundColor.value
+    }
+
+    fun highlightKey(color: Color) {
+        this.backgroundColor.value = color
     }
 }
 

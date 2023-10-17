@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.takenote.classes.Note
-import com.example.takenote.enums.NoteNames
 import com.example.takenote.ui.ui.Clef
 import com.example.takenote.ui.ui.HitZone
 import com.example.takenote.ui.ui.KeyRectangle
@@ -32,7 +31,6 @@ import com.example.takenote.viewmodels.GameViewModel
 @Composable
 fun DisplayGame(
     viewModel: GameViewModel,
-    whiteKeyWidth: Int,
     clefBuffer: Int,
     zoneWidth: Int,
     staveHeight: Float,
@@ -81,7 +79,6 @@ fun DisplayGame(
                     staveHeight = staveHeight.toInt()
                 )
                 DisplayKeys(
-                    whiteKeyWidth = whiteKeyWidth,
                     viewModel = viewModel,
                 )
             }
@@ -154,7 +151,6 @@ fun DisplayStave(
 @Composable
 fun DisplayKeys(
     viewModel: GameViewModel,
-    whiteKeyWidth: Int,
 ) {
     Row(
         //This will contain the keys
@@ -165,9 +161,7 @@ fun DisplayKeys(
         verticalAlignment = Alignment.Bottom,
     ) {
         viewModel.keysArray.forEach { key ->
-            KeyRectangle(key.note, whiteKeyWidth, key.backgroundColor) {
-                viewModel.onKeyPress(key)
-            }
+            KeyRectangle(key) { viewModel.onKeyPress(key) }
         }
     }
 }

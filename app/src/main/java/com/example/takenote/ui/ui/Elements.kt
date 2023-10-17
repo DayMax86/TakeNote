@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,6 +25,7 @@ import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import com.example.takenote.R
 import com.example.takenote.enums.NoteNames
+import com.example.takenote.viewmodels.Key
 
 
 @Composable
@@ -60,24 +62,22 @@ fun Clef(modifier: Modifier) {
 
 @Composable
 fun KeyRectangle(
-    note: NoteNames,
-    noteWidth: Int,
-    keyBackgroundColor: Color,
+    key: Key,
     onClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(15.dp))
             .border(1.dp, Color.LightGray,RoundedCornerShape(15.dp))
-            .width(noteWidth.dp)
+            .width(key.width.dp)
             .fillMaxHeight(0.8f)
-            .background(color = keyBackgroundColor)
+            .background(color = key.getBackgroundColor())
             .clickable {
                 onClick()
             },
         contentAlignment = Alignment.Center,
     ) {
-        Text(text = note.toString())
+        Text(text = key.note.toString())
     }
 }
 

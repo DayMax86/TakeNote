@@ -89,7 +89,6 @@ class StartActivity : AppCompatActivity() {
                                 }
                                 DisplayGame(
                                     gameViewModel,
-                                    gameViewModel.whiteKeyWidth,
                                     gameViewModel.clefBuffer,
                                     gameViewModel.zoneWidth,
                                     gameViewModel.staveHeight,
